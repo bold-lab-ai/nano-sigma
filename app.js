@@ -295,15 +295,6 @@ function render() {
 }
 
 // ── static parts ──
-const nLM = runs.reduce((n, r) => n + r.points.length, 0);
-const nScoredModels = new Set(Object.values(D.scores).flatMap(s => s.entries.map(e => e.model))).size;
-document.getElementById("subtext").innerHTML = [
-  `<span class="n">${runs.length}</span> training runs`, `<span class="n">${nLM}</span> LM checkpoints`,
-  `<span class="n">${nScoredModels}</span> models on return / PnL`,
-  `LOB-Bench <span class="n">${Object.values(D.scores).filter(s => s.bench === "lob").reduce((n, s) => n + s.entries.length, 0)}</span> scored`,
-].join('<span class="sep">|</span>');
-document.getElementById("frozenLabel").textContent = `snapshot ${fmtDate(ms(D.snapshot))} UTC` + (live.length ? ` · ${live.length} run${live.length > 1 ? "s" : ""} training` : "");
-if (live.length) document.querySelector(".pip").classList.add("live");
 document.getElementById("foot").textContent = `nanoSigma · snapshot ${fmtDate(ms(D.snapshot))} UTC`;
 if (document.getElementById("failures")) document.getElementById("failures").innerHTML = failed.map(r =>
   `<li><div class="when">${fmtDate(ms(r.end))} UTC</div><div class="what">${esc(r.name)}</div><p>${esc(r.note)}</p></li>`).join("");
