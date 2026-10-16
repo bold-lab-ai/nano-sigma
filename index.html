@@ -8,9 +8,9 @@
   <meta name="theme-color" content="#ffffff">
   <title>nanoSigma — Score Evolution</title>
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="site.css?v=20261016c">
+  <link rel="stylesheet" href="site.css?v=20261016d">
   <script src="vendor/chart.umd.min.js"></script>
-  <script src="data.js?v=20261016c"></script>
+  <script src="data.js?v=20261016d"></script>
 </head>
 <body>
 <div class="wrap">
@@ -21,6 +21,56 @@
       <span class="frozen"><span class="pip"></span><span id="frozenLabel">snapshot</span></span>
     </div>
   </header>
+  <details class="intro">
+    <summary>About nanoSigma — model, data, training and language-model results</summary>
+    <div class="intro-body">
+
+  <section id="model">
+    <div class="prose"><h2>Model</h2></div>
+    <figure class="wide">
+      <a href="figures/01_architecture.png"><img src="figures/01_architecture.png" width="2142" height="527" alt="Message tokens go through an embedding and one block; the order-book vector goes through an MLP, is repeated 26 times and goes through one block; the two paths are concatenated, fused to width 512, and pass through 6 causal blocks to a next-token head."></a>
+      <figcaption><strong>Figure 1. Two encoders, one trunk.</strong> A message path and an order-book path are fused and passed through six causal Transformer blocks with rotary position embedding.</figcaption>
+    </figure>
+  </section>
+
+  <section id="data" class="prose">
+    <h2>Data</h2>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Split</th><th>Period</th><th>Stocks</th><th>Messages</th><th>Tokens</th></tr></thead>
+      <tbody>
+        <tr><td>Train</td><td>Oct–Dec 2025, 60 trading days</td><td>432</td><td>11.24 billion</td><td>292.3 billion</td></tr>
+        <tr><td>Validation</td><td>939 random 4,096-message windows from the training quarter</td><td>269</td><td>3.85 million</td><td>100.0 million</td></tr>
+        <tr><td>Test</td><td>Jan 2026, 20 trading days</td><td>432</td><td>3.34 billion</td><td>86.8 billion</td></tr>
+      </tbody>
+    </table></div>
+    <p>Book rows where one side of the book is empty are treated as data errors, and any window that touches one is excluded. Real large price moves in thinly traded names are kept.</p>
+  </section>
+
+  <section id="training">
+    <div class="prose">
+      <h2>Training</h2>
+      <p>The sequence length grows in four phases, from 512 to 4,096 messages. Each doubling of length doubles the batch, and the learning rate scales with the square root of the batch.</p>
+    </div>
+    <figure class="wide">
+      <a href="figures/02_curriculum.png"><img src="figures/02_curriculum.png" width="2010" height="609" loading="lazy" alt="Four sequence-length phases over the 10-hour budget: 512, 1,024, 2,048 and 4,096 messages."></a>
+      <figcaption><strong>Figure 2. Sequence-length curriculum</strong> within the 10-hour wall-clock budget.</figcaption>
+    </figure>
+  </section>
+
+  <section id="results">
+    <div class="prose"><h2>Language-model results</h2></div>
+    <figure class="wide">
+      <a href="figures/03_loss.png"><img src="figures/03_loss.png" width="1858" height="822" loading="lazy" alt="Training and validation cross-entropy over the 10-hour run, with brief jumps at each phase switch."></a>
+      <figcaption><strong>Figure 3. Loss curves.</strong> The loss jumps briefly at each phase switch and recovers within minutes; the curve flattens after about 8 hours.</figcaption>
+    </figure>
+    <figure class="wide narrow">
+      <a href="figures/04_final.png"><img src="figures/04_final.png" width="1451" height="691" loading="lazy" alt="Final cross-entropy: 0.4365 nats per token on validation and 0.4636 on test."></a>
+      <figcaption><strong>Figure 4. Final scores.</strong> Validation 0.4365 and test 0.4636 nats per token (11.35 and 12.05 nats per message).</figcaption>
+    </figure>
+  </section>
+
+    </div>
+  </details>
 
   <nav class="scorebar" id="benchTabs" role="tablist" aria-label="Score">
     <button role="tab" data-bench="lm" class="aux"><b>LM loss</b><span>auxiliary: cross-entropy</span></button>
@@ -56,6 +106,6 @@
   <footer><span id="foot">—</span> · <a href="https://github.com/bold-lab-ai/nano-sigma">bold-lab-ai/nano-sigma</a></footer>
 </div>
 <div class="card" id="card" aria-hidden="true"></div>
-<script src="app.js?v=20261016c"></script>
+<script src="app.js?v=20261016d"></script>
 </body>
 </html>

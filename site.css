@@ -93,3 +93,25 @@ code{font:13px var(--mono);background:var(--paper);padding:1px 5px;border-radius
 .bench-fig img{display:block;width:100%;height:auto}
 .bench-fig figcaption{margin-top:8px;font-size:14px;color:var(--muted)}
 .empty[hidden],.bench-fig[hidden]{display:none}
+/* intro dropdown (baseline write-up) */
+.intro{margin:0 0 22px;border:1.2px solid var(--edge);border-radius:10px;background:var(--paper)}
+.intro>summary{cursor:pointer;padding:12px 18px;font-weight:700;font-size:17px;list-style:none}
+.intro>summary::-webkit-details-marker{display:none}
+.intro>summary::before{content:"▸";display:inline-block;width:1.1em;color:var(--hi);transition:transform .15s}
+.intro[open]>summary::before{transform:rotate(90deg)}
+.intro[open]>summary{border-bottom:1px solid var(--line)}
+.intro-body{padding:6px 22px 22px;background:#fff;border-radius:0 0 10px 10px}
+.intro-body section{margin-top:26px}
+.intro-body h2{font-size:22px;margin:0 0 10px;padding-bottom:4px;border-bottom:1px solid var(--line)}
+.intro-body p{margin:0 0 10px}.intro-body ul{padding-left:20px;margin:6px 0}.intro-body li{margin:3px 0}
+.intro-body figure{margin:16px 0}.intro-body figure img{display:block;width:100%;height:auto}
+.intro-body figcaption{font-size:14px;color:var(--muted);margin-top:6px}
+.intro-body .takeaway{margin:16px 0;padding:14px 18px;border:1.2px solid var(--edge);border-radius:10px;background:var(--y1)}
+.intro-body .takeaway p{margin:0}
+.intro-body .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin:16px 0}
+.intro-body .stat{border:1.2px solid var(--edge);border-radius:10px;padding:10px 14px;background:var(--paper)}
+.intro-body .stat b{display:block;font-size:24px;line-height:1.2}.intro-body .stat span{font-size:13px;color:var(--muted)}
+.intro-body .table-wrap{overflow-x:auto;border:1.2px solid var(--edge);border-radius:10px;margin:12px 0}
+.intro-body td,.intro-body th{text-align:left;white-space:normal}
+.intro>summary::before{content:"";width:0;height:0;border-style:solid;border-width:6px 0 6px 9px;border-color:transparent transparent transparent var(--hi);margin-right:10px;vertical-align:1px}
+.intro-body figure.narrow img{max-width:640px;margin:0 auto}
