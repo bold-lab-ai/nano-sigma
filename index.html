@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="author" content="Bold.ai">
+  <meta name="description" content="nanoSigma score evolution: every scored nanoSigma model on LOB-Bench, the return bench and the PnL bench, with the running best over time.">
+  <meta name="theme-color" content="#ffffff">
+  <title>nanoSigma — Score Evolution</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="site.css?v=20261016c">
+  <script src="vendor/chart.umd.min.js"></script>
+  <script src="data.js?v=20261016c"></script>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>nanoSigma</h1>
+    <div class="subtext" id="subtext">—</div>
+    <div class="toolbar">
+      <span class="frozen"><span class="pip"></span><span id="frozenLabel">snapshot</span></span>
+    </div>
+  </header>
+
+  <nav class="scorebar" id="benchTabs" role="tablist" aria-label="Score">
+    <button role="tab" data-bench="lob"><b>LOB-Bench</b><span>generated order flow vs real</span></button>
+    <button role="tab" data-bench="return"><b>Return bench</b><span>forecast the mid-price return</span></button>
+    <button role="tab" data-bench="pnl"><b>PnL bench</b><span>trade on the forecast</span></button>
+    <button role="tab" data-bench="lm" class="aux"><b>LM loss</b><span>auxiliary: cross-entropy</span></button>
+  </nav>
+  <div class="bench-figs">
+    <figure class="bench-fig" data-bench="lob" hidden><a href="figures/bench_lob.png"><img src="figures/bench_lob.png" alt="How LOB-Bench is computed: generated vs real continuation, feature_conditional score"></a></figure>
+    <figure class="bench-fig" data-bench="return" hidden><a href="figures/bench_return.png"><img src="figures/bench_return.png" alt="How the return bench is computed"></a></figure>
+    <figure class="bench-fig" data-bench="pnl" hidden><a href="figures/bench_pnl.png"><img src="figures/bench_pnl.png" alt="How PnL A and PnL B are computed for one bet"></a></figure>
+  </div>
+  <div class="opts" id="opts"></div>
+
+  <section class="main">
+    <div class="sec-head">
+      <h2 id="scoreTitle">—</h2>
+      <p id="scoreNote">—</p>
+    </div>
+    <div class="chart-wrap tall">
+      <canvas id="evo"></canvas>
+      <div class="empty" id="empty" hidden></div>
+    </div>
+    <div class="legend" id="legend"></div>
+  </section>
+
+
+  <section>
+    <div class="sec-head"><h2>Leaderboard</h2><p id="boardNote">—</p></div>
+    <div class="table-wrap"><table id="board"></table></div>
+  </section>
+
+  <footer><span id="foot">—</span> · <a href="https://github.com/bold-lab-ai/nano-sigma">bold-lab-ai/nano-sigma</a></footer>
+</div>
+<div class="card" id="card" aria-hidden="true"></div>
+<script src="app.js?v=20261016c"></script>
+</body>
+</html>
