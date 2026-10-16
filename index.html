@@ -23,10 +23,10 @@
   </header>
 
   <nav class="scorebar" id="benchTabs" role="tablist" aria-label="Score">
+    <button role="tab" data-bench="lm" class="aux"><b>LM loss</b><span>auxiliary: cross-entropy</span></button>
     <button role="tab" data-bench="lob"><b>LOB-Bench</b><span>generated order flow vs real</span></button>
     <button role="tab" data-bench="return"><b>Return bench</b><span>forecast the mid-price return</span></button>
     <button role="tab" data-bench="pnl"><b>PnL bench</b><span>trade on the forecast</span></button>
-    <button role="tab" data-bench="lm" class="aux"><b>LM loss</b><span>auxiliary: cross-entropy</span></button>
   </nav>
   <div class="bench-figs">
     <figure class="bench-fig" data-bench="lob" hidden><a href="figures/bench_lob.png"><img src="figures/bench_lob.png" alt="How LOB-Bench is computed: generated vs real continuation, feature_conditional score"></a></figure>
