@@ -1,43 +1,7 @@
 window.NS_DATA = {
- "snapshot": "2026-10-18T17:43:58Z",
+ "snapshot": "2026-10-18T17:48:23Z",
  "lm_metric": "validation cross-entropy per message (nats), 939 fixed windows of 4,096 messages",
  "runs": [
-  {
-   "name": "smoke 1",
-   "kind": "smoke",
-   "desc": "First end-to-end smoke test of the trainer.",
-   "start": "2026-10-12T17:29:09Z",
-   "end": "2026-10-12T17:29:19Z",
-   "status": "failed",
-   "note": "Stopped after 20 steps while wiring up evaluation; no score.",
-   "budget_h": 0.05,
-   "no_book": false,
-   "params_m": null,
-   "points": []
-  },
-  {
-   "name": "smoke 2",
-   "kind": "smoke",
-   "desc": "5-minute smoke test on two nodes.",
-   "start": "2026-10-12T17:32:16Z",
-   "end": "2026-10-12T17:37:16Z",
-   "status": "finished",
-   "note": null,
-   "budget_h": 0.08,
-   "no_book": false,
-   "params_m": 29.15,
-   "points": [
-    {
-     "t": "2026-10-12T17:37:16Z",
-     "hours": 0.08,
-     "step": 113,
-     "tokens_b": 0.29,
-     "val": 67.143,
-     "test": 68.604,
-     "final": true
-    }
-   ]
-  },
   {
    "name": "baseline r1",
    "kind": "baseline",
@@ -50,38 +14,6 @@ window.NS_DATA = {
    "no_book": false,
    "params_m": null,
    "points": []
-  },
-  {
-   "name": "smoke 3",
-   "kind": "smoke",
-   "desc": "Smoke test after the eval-preload fix.",
-   "start": "2026-10-12T19:00:02Z",
-   "end": "2026-10-12T19:03:48Z",
-   "status": "finished",
-   "note": null,
-   "budget_h": 0.06,
-   "no_book": false,
-   "params_m": 29.15,
-   "points": [
-    {
-     "t": "2026-10-12T19:02:36Z",
-     "hours": 0.04,
-     "step": 32,
-     "tokens_b": 0.1,
-     "val": 86.641,
-     "test": null,
-     "final": false
-    },
-    {
-     "t": "2026-10-12T19:03:48Z",
-     "hours": 0.06,
-     "step": 37,
-     "tokens_b": 0.15,
-     "val": 83.137,
-     "test": 83.531,
-     "final": true
-    }
-   ]
   },
   {
    "name": "baseline r2",
@@ -97,47 +29,6 @@ window.NS_DATA = {
    "points": []
   },
   {
-   "name": "smoke 4",
-   "kind": "smoke",
-   "desc": "Smoke test after the fp32-book fix.",
-   "start": "2026-10-12T22:59:23Z",
-   "end": "2026-10-12T23:01:56Z",
-   "status": "finished",
-   "note": null,
-   "budget_h": 0.04,
-   "no_book": false,
-   "params_m": 29.15,
-   "points": [
-    {
-     "t": "2026-10-12T23:01:25Z",
-     "hours": 0.03,
-     "step": 23,
-     "tokens_b": 0.08,
-     "val": 101.136,
-     "test": null,
-     "final": false
-    },
-    {
-     "t": "2026-10-12T23:01:56Z",
-     "hours": 0.04,
-     "step": 25,
-     "tokens_b": 0.09,
-     "val": 99.562,
-     "test": null,
-     "final": false
-    },
-    {
-     "t": "2026-10-12T23:01:56Z",
-     "hours": 0.04,
-     "step": 25,
-     "tokens_b": 0.09,
-     "val": 99.562,
-     "test": 99.175,
-     "final": true
-    }
-   ]
-  },
-  {
    "name": "baseline r3",
    "kind": "baseline",
    "desc": "Third baseline attempt.",
@@ -149,38 +40,6 @@ window.NS_DATA = {
    "no_book": false,
    "params_m": null,
    "points": []
-  },
-  {
-   "name": "smoke 5",
-   "kind": "smoke",
-   "desc": "Smoke test with bad-row exclusion on dataset v2.",
-   "start": "2026-10-13T15:49:07Z",
-   "end": "2026-10-13T16:13:17Z",
-   "status": "finished",
-   "note": null,
-   "budget_h": 0.4,
-   "no_book": false,
-   "params_m": 29.15,
-   "points": [
-    {
-     "t": "2026-10-13T16:07:15Z",
-     "hours": 0.3,
-     "step": 578,
-     "tokens_b": 1.28,
-     "val": 34.586,
-     "test": null,
-     "final": false
-    },
-    {
-     "t": "2026-10-13T16:13:17Z",
-     "hours": 0.4,
-     "step": 604,
-     "tokens_b": 1.5,
-     "val": 33.483,
-     "test": 34.901,
-     "final": true
-    }
-   ]
   },
   {
    "name": "baseline r4",
@@ -296,61 +155,6 @@ window.NS_DATA = {
      "tokens_b": 39.75,
      "val": 11.213,
      "test": 11.934,
-     "final": true
-    }
-   ]
-  },
-  {
-   "name": "new tokens \u00b7 smoke",
-   "kind": "scenario",
-   "desc": "Scenario (a), new message tokenization, smoke test.",
-   "start": "2026-10-15T08:53:19Z",
-   "end": "2026-10-15T09:08:24Z",
-   "status": "finished",
-   "note": null,
-   "budget_h": 0.25,
-   "no_book": false,
-   "params_m": 29.26,
-   "points": [
-    {
-     "t": "2026-10-15T09:08:24Z",
-     "hours": 0.25,
-     "step": 828,
-     "tokens_b": 0.68,
-     "val": 16.649,
-     "test": 20.53,
-     "final": true
-    }
-   ]
-  },
-  {
-   "name": "field embedding \u00b7 smoke",
-   "kind": "scenario",
-   "desc": "Field embedding (27 positions per message), smoke test.",
-   "start": "2026-10-15T09:07:33Z",
-   "end": "2026-10-15T09:25:39Z",
-   "status": "finished",
-   "note": null,
-   "budget_h": 0.3,
-   "no_book": false,
-   "params_m": 39.13,
-   "points": [
-    {
-     "t": "2026-10-15T09:20:11Z",
-     "hours": 0.21,
-     "step": 452,
-     "tokens_b": 1.05,
-     "val": 28.064,
-     "test": null,
-     "final": false
-    },
-    {
-     "t": "2026-10-15T09:25:39Z",
-     "hours": 0.3,
-     "step": 481,
-     "tokens_b": 1.3,
-     "val": 26.887,
-     "test": 30.033,
      "final": true
     }
    ]
