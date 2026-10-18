@@ -1,5 +1,5 @@
 window.NS_DATA = {
- "snapshot": "2026-10-15T17:24:50Z",
+ "snapshot": "2026-10-18T17:12:36Z",
  "lm_metric": "validation cross-entropy per message (nats), 939 fixed windows of 4,096 messages",
  "runs": [
   {
@@ -246,12 +246,12 @@ window.NS_DATA = {
    "kind": "ablation",
    "desc": "Baseline without the order-book input, same budget.",
    "start": "2026-10-15T08:51:42Z",
-   "end": "2026-10-15T17:17:20Z",
-   "status": "running",
+   "end": "2026-10-15T18:51:51Z",
+   "status": "finished",
    "note": null,
    "budget_h": 10.0,
    "no_book": true,
-   "params_m": null,
+   "params_m": 24.19,
    "points": [
     {
      "t": "2026-10-15T14:51:42Z",
@@ -279,6 +279,24 @@ window.NS_DATA = {
      "val": 11.301,
      "test": null,
      "final": false
+    },
+    {
+     "t": "2026-10-15T17:51:42Z",
+     "hours": 9.0,
+     "step": 14409,
+     "tokens_b": 37.24,
+     "val": 11.245,
+     "test": null,
+     "final": false
+    },
+    {
+     "t": "2026-10-15T18:51:51Z",
+     "hours": 10.0,
+     "step": 14704,
+     "tokens_b": 39.75,
+     "val": 11.213,
+     "test": 11.934,
+     "final": true
     }
    ]
   },
@@ -342,12 +360,12 @@ window.NS_DATA = {
    "kind": "scenario",
    "desc": "Field embedding: per-field tables and heads, same budget.",
    "start": "2026-10-15T09:07:44Z",
-   "end": "2026-10-15T17:18:22Z",
-   "status": "running",
+   "end": "2026-10-15T19:07:52Z",
+   "status": "finished",
    "note": null,
    "budget_h": 10.0,
    "no_book": false,
-   "params_m": null,
+   "params_m": 39.13,
    "points": [
     {
      "t": "2026-10-15T15:07:45Z",
@@ -375,6 +393,24 @@ window.NS_DATA = {
      "val": 11.694,
      "test": null,
      "final": false
+    },
+    {
+     "t": "2026-10-15T18:07:51Z",
+     "hours": 9.0,
+     "step": 10504,
+     "tokens_b": 31.05,
+     "val": 11.605,
+     "test": null,
+     "final": false
+    },
+    {
+     "t": "2026-10-15T19:07:52Z",
+     "hours": 10.0,
+     "step": 10800,
+     "tokens_b": 33.57,
+     "val": 11.637,
+     "test": 12.377,
+     "final": true
     }
    ]
   },
@@ -383,12 +419,12 @@ window.NS_DATA = {
    "kind": "scenario",
    "desc": "Scenario (a): new message tokenization, same budget as the baseline.",
    "start": "2026-10-15T09:11:59Z",
-   "end": "2026-10-15T17:21:20Z",
-   "status": "running",
+   "end": "2026-10-15T19:11:59Z",
+   "status": "finished",
    "note": null,
    "budget_h": 10.0,
    "no_book": false,
-   "params_m": null,
+   "params_m": 29.26,
    "points": [
     {
      "t": "2026-10-15T15:12:03Z",
@@ -416,6 +452,201 @@ window.NS_DATA = {
      "val": 10.297,
      "test": null,
      "final": false
+    },
+    {
+     "t": "2026-10-15T18:12:01Z",
+     "hours": 9.0,
+     "step": 25031,
+     "tokens_b": 44.26,
+     "val": 10.265,
+     "test": null,
+     "final": false
+    },
+    {
+     "t": "2026-10-15T19:11:59Z",
+     "hours": 10.0,
+     "step": 25612,
+     "tokens_b": 47.5,
+     "val": 10.242,
+     "test": 10.946,
+     "final": true
+    }
+   ]
+  },
+  {
+   "name": "level-total book state (A)",
+   "kind": "scenario",
+   "desc": "Same as Q, but each price level gives only its total size, not the individual orders. Same budget.",
+   "start": "2026-10-16T08:28:05Z",
+   "end": "2026-10-16T18:28:11Z",
+   "status": "finished",
+   "note": null,
+   "budget_h": 10.0,
+   "no_book": false,
+   "params_m": 39.54,
+   "points": [
+    {
+     "t": "2026-10-16T14:28:11Z",
+     "hours": 6.0,
+     "step": 17846,
+     "tokens_b": 31.11,
+     "val": 10.686,
+     "test": null,
+     "final": false
+    },
+    {
+     "t": "2026-10-16T15:28:11Z",
+     "hours": 7.0,
+     "step": 18363,
+     "tokens_b": 34.33,
+     "val": 10.587,
+     "test": null,
+     "final": false
+    },
+    {
+     "t": "2026-10-16T16:28:05Z",
+     "hours": 8.0,
+     "step": 18880,
+     "tokens_b": 37.55,
+     "val": 10.521,
+     "test": null,
+     "final": false
+    },
+    {
+     "t": "2026-10-16T17:28:06Z",
+     "hours": 9.0,
+     "step": 19399,
+     "tokens_b": 40.78,
+     "val": 10.491,
+     "test": null,
+     "final": false
+    },
+    {
+     "t": "2026-10-16T18:28:11Z",
+     "hours": 10.0,
+     "step": 19918,
+     "tokens_b": 44.01,
+     "val": 10.459,
+     "test": 11.184,
+     "final": true
+    }
+   ]
+  },
+  {
+   "name": "no book state (N)",
+   "kind": "ablation",
+   "desc": "Same model as Q with no book state: messages only. Same budget.",
+   "start": "2026-10-16T08:28:05Z",
+   "end": "2026-10-16T18:28:11Z",
+   "status": "finished",
+   "note": null,
+   "budget_h": 10.0,
+   "no_book": false,
+   "params_m": 27.37,
+   "points": [
+    {
+     "t": "2026-10-16T14:28:09Z",
+     "hours": 6.0,
+     "step": 20644,
+     "tokens_b": 34.42,
+     "val": 10.537,
+     "test": null,
+     "final": false
+    },
+    {
+     "t": "2026-10-16T15:28:06Z",
+     "hours": 7.0,
+     "step": 21181,
+     "tokens_b": 37.76,
+     "val": 10.457,
+     "test": null,
+     "final": false
+    },
+    {
+     "t": "2026-10-16T16:28:05Z",
+     "hours": 8.0,
+     "step": 21719,
+     "tokens_b": 41.11,
+     "val": 10.406,
+     "test": null,
+     "final": false
+    },
+    {
+     "t": "2026-10-16T17:28:10Z",
+     "hours": 9.0,
+     "step": 22258,
+     "tokens_b": 44.47,
+     "val": 10.367,
+     "test": null,
+     "final": false
+    },
+    {
+     "t": "2026-10-16T18:28:11Z",
+     "hours": 10.0,
+     "step": 22796,
+     "tokens_b": 47.82,
+     "val": 10.344,
+     "test": 11.061,
+     "final": true
+    }
+   ]
+  },
+  {
+   "name": "full book state (Q)",
+   "kind": "scenario",
+   "desc": "Scenario (a) tokens plus the full order-book state once per window: every price level and every resting order in queue order. Same budget.",
+   "start": "2026-10-16T08:28:06Z",
+   "end": "2026-10-16T18:28:08Z",
+   "status": "finished",
+   "note": null,
+   "budget_h": 10.0,
+   "no_book": false,
+   "params_m": 39.54,
+   "points": [
+    {
+     "t": "2026-10-16T14:28:06Z",
+     "hours": 6.0,
+     "step": 18238,
+     "tokens_b": 31.37,
+     "val": 10.469,
+     "test": null,
+     "final": false
+    },
+    {
+     "t": "2026-10-16T15:28:06Z",
+     "hours": 7.0,
+     "step": 18754,
+     "tokens_b": 34.58,
+     "val": 10.405,
+     "test": null,
+     "final": false
+    },
+    {
+     "t": "2026-10-16T16:28:09Z",
+     "hours": 8.0,
+     "step": 19271,
+     "tokens_b": 37.8,
+     "val": 10.355,
+     "test": null,
+     "final": false
+    },
+    {
+     "t": "2026-10-16T17:28:07Z",
+     "hours": 9.0,
+     "step": 19787,
+     "tokens_b": 41.01,
+     "val": 10.319,
+     "test": null,
+     "final": false
+    },
+    {
+     "t": "2026-10-16T18:28:08Z",
+     "hours": 10.0,
+     "step": 20303,
+     "tokens_b": 44.22,
+     "val": 10.302,
+     "test": 11.02,
+     "final": true
     }
    ]
   }
