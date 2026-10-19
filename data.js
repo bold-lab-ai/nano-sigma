@@ -1,5 +1,5 @@
 window.NS_DATA = {
- "snapshot": "2026-10-18T17:48:23Z",
+ "snapshot": "2026-10-19T08:33:33Z",
  "lm_metric": "validation cross-entropy per message (nats), 939 fixed windows of 4,096 messages",
  "runs": [
   {
@@ -4423,7 +4423,78 @@ window.NS_DATA = {
    "label": "LOB-Bench feature_marginal",
    "better": "lower",
    "unit": "",
-   "entries": [],
+   "entries": [
+    {
+     "t": "2026-10-19T08:32:08Z",
+     "model": "baseline r4",
+     "value": 0.0529,
+     "kv": [
+      "mean over 21 features",
+      "864 histories x 500 generated messages",
+      "invalid generated messages 10.0% (kept, book unchanged)"
+     ]
+    },
+    {
+     "t": "2026-10-19T08:32:12Z",
+     "model": "no-book ablation",
+     "value": 0.0775,
+     "kv": [
+      "mean over 21 features",
+      "864 histories x 500 generated messages",
+      "invalid generated messages 13.4% (kept, book unchanged)"
+     ]
+    },
+    {
+     "t": "2026-10-19T08:32:16Z",
+     "model": "field embedding",
+     "value": 0.0529,
+     "kv": [
+      "mean over 21 features",
+      "864 histories x 500 generated messages",
+      "invalid generated messages 9.9% (kept, book unchanged)"
+     ]
+    },
+    {
+     "t": "2026-10-19T08:32:21Z",
+     "model": "new tokens (a)",
+     "value": 0.0345,
+     "kv": [
+      "mean over 21 features",
+      "864 histories x 500 generated messages",
+      "invalid generated messages 11.3% (kept, book unchanged)"
+     ]
+    },
+    {
+     "t": "2026-10-19T08:32:25Z",
+     "model": "full book state (Q)",
+     "value": 0.0531,
+     "kv": [
+      "mean over 21 features",
+      "864 histories x 500 generated messages",
+      "invalid generated messages 16.3% (kept, book unchanged)"
+     ]
+    },
+    {
+     "t": "2026-10-19T08:32:29Z",
+     "model": "level-total book state (A)",
+     "value": 0.0551,
+     "kv": [
+      "mean over 21 features",
+      "864 histories x 500 generated messages",
+      "invalid generated messages 17.3% (kept, book unchanged)"
+     ]
+    },
+    {
+     "t": "2026-10-19T08:32:33Z",
+     "model": "no book state (N)",
+     "value": 0.0478,
+     "kv": [
+      "mean over 21 features",
+      "864 histories x 500 generated messages",
+      "invalid generated messages 16.2% (kept, book unchanged)"
+     ]
+    }
+   ],
    "baselines": []
   },
   "lob:context_paired": {
@@ -4433,7 +4504,78 @@ window.NS_DATA = {
    "label": "LOB-Bench context_paired",
    "better": "lower",
    "unit": "",
-   "entries": [],
+   "entries": [
+    {
+     "t": "2026-10-19T08:32:08Z",
+     "model": "baseline r4",
+     "value": 0.5568,
+     "kv": [
+      "787 histories, 4 features / fixed scales",
+      "864 histories x 500 generated messages",
+      "invalid generated messages 10.0% (kept, book unchanged)"
+     ]
+    },
+    {
+     "t": "2026-10-19T08:32:12Z",
+     "model": "no-book ablation",
+     "value": 0.5542,
+     "kv": [
+      "787 histories, 4 features / fixed scales",
+      "864 histories x 500 generated messages",
+      "invalid generated messages 13.4% (kept, book unchanged)"
+     ]
+    },
+    {
+     "t": "2026-10-19T08:32:16Z",
+     "model": "field embedding",
+     "value": 0.5283,
+     "kv": [
+      "787 histories, 4 features / fixed scales",
+      "864 histories x 500 generated messages",
+      "invalid generated messages 9.9% (kept, book unchanged)"
+     ]
+    },
+    {
+     "t": "2026-10-19T08:32:21Z",
+     "model": "new tokens (a)",
+     "value": 0.5417,
+     "kv": [
+      "787 histories, 4 features / fixed scales",
+      "864 histories x 500 generated messages",
+      "invalid generated messages 11.3% (kept, book unchanged)"
+     ]
+    },
+    {
+     "t": "2026-10-19T08:32:25Z",
+     "model": "full book state (Q)",
+     "value": 0.5072,
+     "kv": [
+      "787 histories, 4 features / fixed scales",
+      "864 histories x 500 generated messages",
+      "invalid generated messages 16.3% (kept, book unchanged)"
+     ]
+    },
+    {
+     "t": "2026-10-19T08:32:29Z",
+     "model": "level-total book state (A)",
+     "value": 0.5065,
+     "kv": [
+      "787 histories, 4 features / fixed scales",
+      "864 histories x 500 generated messages",
+      "invalid generated messages 17.3% (kept, book unchanged)"
+     ]
+    },
+    {
+     "t": "2026-10-19T08:32:33Z",
+     "model": "no book state (N)",
+     "value": 0.5223,
+     "kv": [
+      "787 histories, 4 features / fixed scales",
+      "864 histories x 500 generated messages",
+      "invalid generated messages 16.2% (kept, book unchanged)"
+     ]
+    }
+   ],
    "baselines": []
   },
   "lob:feature_conditional": {
@@ -4443,7 +4585,78 @@ window.NS_DATA = {
    "label": "LOB-Bench feature_conditional",
    "better": "lower",
    "unit": "",
-   "entries": [],
+   "entries": [
+    {
+     "t": "2026-10-19T08:32:08Z",
+     "model": "baseline r4",
+     "value": 0.2273,
+     "kv": [
+      "spread | time 0.254 \u00b7 spread | volatility 0.248 \u00b7 ask_volume | spread 0.180",
+      "864 histories x 500 generated messages",
+      "invalid generated messages 10.0% (kept, book unchanged)"
+     ]
+    },
+    {
+     "t": "2026-10-19T08:32:12Z",
+     "model": "no-book ablation",
+     "value": 0.2384,
+     "kv": [
+      "spread | time 0.244 \u00b7 spread | volatility 0.255 \u00b7 ask_volume | spread 0.216",
+      "864 histories x 500 generated messages",
+      "invalid generated messages 13.4% (kept, book unchanged)"
+     ]
+    },
+    {
+     "t": "2026-10-19T08:32:16Z",
+     "model": "field embedding",
+     "value": 0.2038,
+     "kv": [
+      "spread | volatility 0.215 \u00b7 spread | time 0.212 \u00b7 ask_volume | spread 0.184",
+      "864 histories x 500 generated messages",
+      "invalid generated messages 9.9% (kept, book unchanged)"
+     ]
+    },
+    {
+     "t": "2026-10-19T08:32:21Z",
+     "model": "new tokens (a)",
+     "value": 0.1781,
+     "kv": [
+      "spread | time 0.186 \u00b7 spread | volatility 0.188 \u00b7 ask_volume | spread 0.160",
+      "864 histories x 500 generated messages",
+      "invalid generated messages 11.3% (kept, book unchanged)"
+     ]
+    },
+    {
+     "t": "2026-10-19T08:32:25Z",
+     "model": "full book state (Q)",
+     "value": 0.2356,
+     "kv": [
+      "spread | time 0.231 \u00b7 spread | volatility 0.263 \u00b7 ask_volume | spread 0.212",
+      "864 histories x 500 generated messages",
+      "invalid generated messages 16.3% (kept, book unchanged)"
+     ]
+    },
+    {
+     "t": "2026-10-19T08:32:29Z",
+     "model": "level-total book state (A)",
+     "value": 0.2644,
+     "kv": [
+      "spread | time 0.271 \u00b7 spread | volatility 0.279 \u00b7 ask_volume | spread 0.243",
+      "864 histories x 500 generated messages",
+      "invalid generated messages 17.3% (kept, book unchanged)"
+     ]
+    },
+    {
+     "t": "2026-10-19T08:32:33Z",
+     "model": "no book state (N)",
+     "value": 0.2662,
+     "kv": [
+      "spread | time 0.275 \u00b7 spread | volatility 0.298 \u00b7 ask_volume | spread 0.226",
+      "864 histories x 500 generated messages",
+      "invalid generated messages 16.2% (kept, book unchanged)"
+     ]
+    }
+   ],
    "baselines": []
   },
   "lob:context_binned": {
@@ -4453,7 +4666,78 @@ window.NS_DATA = {
    "label": "LOB-Bench context_binned",
    "better": "lower",
    "unit": "",
-   "entries": [],
+   "entries": [
+    {
+     "t": "2026-10-19T08:32:08Z",
+     "model": "baseline r4",
+     "value": 0.1804,
+     "kv": [
+      "ask_volume | spread 0.180",
+      "864 histories x 500 generated messages",
+      "invalid generated messages 10.0% (kept, book unchanged)"
+     ]
+    },
+    {
+     "t": "2026-10-19T08:32:12Z",
+     "model": "no-book ablation",
+     "value": 0.2162,
+     "kv": [
+      "ask_volume | spread 0.216",
+      "864 histories x 500 generated messages",
+      "invalid generated messages 13.4% (kept, book unchanged)"
+     ]
+    },
+    {
+     "t": "2026-10-19T08:32:16Z",
+     "model": "field embedding",
+     "value": 0.185,
+     "kv": [
+      "ask_volume | spread 0.185",
+      "864 histories x 500 generated messages",
+      "invalid generated messages 9.9% (kept, book unchanged)"
+     ]
+    },
+    {
+     "t": "2026-10-19T08:32:21Z",
+     "model": "new tokens (a)",
+     "value": 0.1603,
+     "kv": [
+      "ask_volume | spread 0.160",
+      "864 histories x 500 generated messages",
+      "invalid generated messages 11.3% (kept, book unchanged)"
+     ]
+    },
+    {
+     "t": "2026-10-19T08:32:25Z",
+     "model": "full book state (Q)",
+     "value": 0.2124,
+     "kv": [
+      "ask_volume | spread 0.212",
+      "864 histories x 500 generated messages",
+      "invalid generated messages 16.3% (kept, book unchanged)"
+     ]
+    },
+    {
+     "t": "2026-10-19T08:32:29Z",
+     "model": "level-total book state (A)",
+     "value": 0.243,
+     "kv": [
+      "ask_volume | spread 0.243",
+      "864 histories x 500 generated messages",
+      "invalid generated messages 17.3% (kept, book unchanged)"
+     ]
+    },
+    {
+     "t": "2026-10-19T08:32:33Z",
+     "model": "no book state (N)",
+     "value": 0.2259,
+     "kv": [
+      "ask_volume | spread 0.226",
+      "864 histories x 500 generated messages",
+      "invalid generated messages 16.2% (kept, book unchanged)"
+     ]
+    }
+   ],
    "baselines": []
   },
   "lob:time_lagged": {
@@ -4463,7 +4747,78 @@ window.NS_DATA = {
    "label": "LOB-Bench time_lagged",
    "better": "lower",
    "unit": "",
-   "entries": [],
+   "entries": [
+    {
+     "t": "2026-10-19T08:32:08Z",
+     "model": "baseline r4",
+     "value": 0.0097,
+     "kv": [
+      "bid_volume_touch | ofi 0.006 \u00b7 ask_volume_touch | ofi 0.005 \u00b7 ask_volume | spread 0.018",
+      "864 histories x 500 generated messages",
+      "invalid generated messages 10.0% (kept, book unchanged)"
+     ]
+    },
+    {
+     "t": "2026-10-19T08:32:12Z",
+     "model": "no-book ablation",
+     "value": 0.0157,
+     "kv": [
+      "bid_volume_touch | ofi 0.009 \u00b7 ask_volume_touch | ofi 0.014 \u00b7 ask_volume | spread 0.025",
+      "864 histories x 500 generated messages",
+      "invalid generated messages 13.4% (kept, book unchanged)"
+     ]
+    },
+    {
+     "t": "2026-10-19T08:32:16Z",
+     "model": "field embedding",
+     "value": 0.0111,
+     "kv": [
+      "bid_volume_touch | ofi 0.005 \u00b7 ask_volume_touch | ofi 0.008 \u00b7 ask_volume | spread 0.020",
+      "864 histories x 500 generated messages",
+      "invalid generated messages 9.9% (kept, book unchanged)"
+     ]
+    },
+    {
+     "t": "2026-10-19T08:32:21Z",
+     "model": "new tokens (a)",
+     "value": 0.0085,
+     "kv": [
+      "bid_volume_touch | ofi 0.005 \u00b7 ask_volume_touch | ofi 0.005 \u00b7 ask_volume | spread 0.016",
+      "864 histories x 500 generated messages",
+      "invalid generated messages 11.3% (kept, book unchanged)"
+     ]
+    },
+    {
+     "t": "2026-10-19T08:32:25Z",
+     "model": "full book state (Q)",
+     "value": 0.014,
+     "kv": [
+      "bid_volume_touch | ofi 0.007 \u00b7 ask_volume_touch | ofi 0.013 \u00b7 ask_volume | spread 0.022",
+      "864 histories x 500 generated messages",
+      "invalid generated messages 16.3% (kept, book unchanged)"
+     ]
+    },
+    {
+     "t": "2026-10-19T08:32:29Z",
+     "model": "level-total book state (A)",
+     "value": 0.0142,
+     "kv": [
+      "bid_volume_touch | ofi 0.011 \u00b7 ask_volume_touch | ofi 0.011 \u00b7 ask_volume | spread 0.021",
+      "864 histories x 500 generated messages",
+      "invalid generated messages 17.3% (kept, book unchanged)"
+     ]
+    },
+    {
+     "t": "2026-10-19T08:32:33Z",
+     "model": "no book state (N)",
+     "value": 0.0127,
+     "kv": [
+      "ask_volume_touch | ofi 0.011 \u00b7 bid_volume_touch | ofi 0.007 \u00b7 ask_volume | spread 0.021",
+      "864 histories x 500 generated messages",
+      "invalid generated messages 16.2% (kept, book unchanged)"
+     ]
+    }
+   ],
    "baselines": []
   },
   "lob:temporal_divergence": {
@@ -4473,7 +4828,78 @@ window.NS_DATA = {
    "label": "LOB-Bench temporal_divergence",
    "better": "lower",
    "unit": "",
-   "entries": [],
+   "entries": [
+    {
+     "t": "2026-10-19T08:32:08Z",
+     "model": "baseline r4",
+     "value": 0.0632,
+     "kv": [
+      "per 100 messages: 0.027 \u2192 0.044 \u2192 0.055 \u2192 0.060 \u2192 0.063 (7 features)",
+      "864 histories x 500 generated messages",
+      "invalid generated messages 10.0% (kept, book unchanged)"
+     ]
+    },
+    {
+     "t": "2026-10-19T08:32:12Z",
+     "model": "no-book ablation",
+     "value": 0.0898,
+     "kv": [
+      "per 100 messages: 0.029 \u2192 0.057 \u2192 0.071 \u2192 0.082 \u2192 0.090 (7 features)",
+      "864 histories x 500 generated messages",
+      "invalid generated messages 13.4% (kept, book unchanged)"
+     ]
+    },
+    {
+     "t": "2026-10-19T08:32:16Z",
+     "model": "field embedding",
+     "value": 0.0678,
+     "kv": [
+      "per 100 messages: 0.029 \u2192 0.048 \u2192 0.063 \u2192 0.072 \u2192 0.068 (7 features)",
+      "864 histories x 500 generated messages",
+      "invalid generated messages 9.9% (kept, book unchanged)"
+     ]
+    },
+    {
+     "t": "2026-10-19T08:32:21Z",
+     "model": "new tokens (a)",
+     "value": 0.0559,
+     "kv": [
+      "per 100 messages: 0.022 \u2192 0.038 \u2192 0.043 \u2192 0.058 \u2192 0.056 (7 features)",
+      "864 histories x 500 generated messages",
+      "invalid generated messages 11.3% (kept, book unchanged)"
+     ]
+    },
+    {
+     "t": "2026-10-19T08:32:25Z",
+     "model": "full book state (Q)",
+     "value": 0.0958,
+     "kv": [
+      "per 100 messages: 0.028 \u2192 0.046 \u2192 0.065 \u2192 0.083 \u2192 0.096 (7 features)",
+      "864 histories x 500 generated messages",
+      "invalid generated messages 16.3% (kept, book unchanged)"
+     ]
+    },
+    {
+     "t": "2026-10-19T08:32:29Z",
+     "model": "level-total book state (A)",
+     "value": 0.1024,
+     "kv": [
+      "per 100 messages: 0.037 \u2192 0.059 \u2192 0.076 \u2192 0.090 \u2192 0.102 (7 features)",
+      "864 histories x 500 generated messages",
+      "invalid generated messages 17.3% (kept, book unchanged)"
+     ]
+    },
+    {
+     "t": "2026-10-19T08:32:33Z",
+     "model": "no book state (N)",
+     "value": 0.0895,
+     "kv": [
+      "per 100 messages: 0.032 \u2192 0.056 \u2192 0.065 \u2192 0.075 \u2192 0.090 (7 features)",
+      "864 histories x 500 generated messages",
+      "invalid generated messages 16.2% (kept, book unchanged)"
+     ]
+    }
+   ],
    "baselines": []
   }
  },
