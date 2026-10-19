@@ -2,7 +2,10 @@
 // nanoSigma score evolution. Data: window.NS_DATA from build_data.py. One generic evolution chart,
 // re-drawn for the selected score (LOB-Bench / return bench / PnL bench / LM loss).
 const D = window.NS_DATA;
-const HI = "#c2185b", HI_FILL = "rgba(194,24,91,0.08)", EDGE = "#222", MUTED = "#555", OTHER = "#f8a6b6", GRID = "#efebe5";
+let HI = "#c2185b", HI_FILL = "rgba(194,24,91,0.08)", OTHER = "#f8a6b6";
+const EDGE = "#222", MUTED = "#555", GRID = "#efebe5";
+// speed view swaps the yellow -> pink palette for sky -> ocean blue
+const setPalette = speed => { [HI, HI_FILL, OTHER] = speed ? ["#0b5c96", "rgba(11,92,150,0.08)", "#82cde6"] : ["#c2185b", "rgba(194,24,91,0.08)", "#f8a6b6"]; };
 const FONT = '"CMU Serif", Georgia, serif';
 const MONO = "ui-monospace, Menlo, Consolas, monospace";
 Chart.defaults.font.family = FONT;
@@ -28,9 +31,15 @@ const failed = runs.filter(r => r.status === "failed");
 
 // ── state ──
 const HORIZONS = [...new Set(Object.values(D.scores).filter(s => s.h).map(s => s.h))].sort((a, b) => a - b);
-const S = { bench: null, lob: D.lob_default, h: HORIZONS.includes(128) ? 128 : HORIZONS[0], metric: "pearson", variant: "A", sizing: "x" };
+const S = { bench: null, lob: D.lob_default, h: HORIZONS.includes(128) ? 128 : HORIZONS[0], metric: "pearson", variant: "A", sizing: "x",
+  speed: false, tgt: 1, ft: "3h" };
 (function readHash() {
-  const [b, ...rest] = decodeURIComponent(location.hash.slice(1)).split("/");
+  let [b, ...rest] = decodeURIComponent(location.hash.slice(1)).split("/");
+  if (b === "speed") {
+    // speed view: one gate per bench, all at r4's own score (h 128, 3 h fine-tune, default LOB method)
+    S.speed = true; S.bench = ["lob", "return", "pnl", "lm"].includes(rest[0]) ? rest[0] : "lob";
+    return;
+  }
   if (!["lob", "return", "pnl", "lm"].includes(b)) return;
   S.bench = b;
   if (b === "lob" && D.lob_methods.includes(rest[0])) S.lob = rest[0];
@@ -40,12 +49,15 @@ const S = { bench: null, lob: D.lob_default, h: HORIZONS.includes(128) ? 128 : H
 })();
 if (!S.bench) S.bench = D.scores["lob:" + S.lob].entries.length ? "lob" : "return";
 const writeHash = () => {
+  if (S.speed) {
+    history.replaceState(null, "", "#speed/" + S.bench); return;
+  }
   const parts = { lob: [S.lob], return: [S.h, S.metric], pnl: [S.h, S.variant, S.sizing], lm: [] }[S.bench];
   history.replaceState(null, "", "#" + [S.bench, ...parts].join("/"));
 };
 
 // ── series builders ──
-const fmtVal = (v, unit) => v == null ? "—" : (unit === "bps" ? (v > 0 ? "+" : "") + v.toFixed(2) + " bps" : v.toFixed(3));
+const fmtVal = (v, unit) => v == null ? "—" : unit === "h" ? +v.toFixed(2) + " h" : (unit === "bps" ? (v > 0 ? "+" : "") + v.toFixed(2) + " bps" : v.toFixed(3));
 
 function lmSeries() {
   const entries = [];
@@ -137,6 +149,7 @@ function drawEvo(ser) {
   let yLo, yHi;
   if (ser.log) { yLo = Math.min(...vals) * 0.88; yHi = Math.max(...vals) * 1.35; }
   else if (vals.length) { const lo = Math.min(...vals), hi = Math.max(...vals), pd = (hi - lo) * 0.18 || 0.05; yLo = lo - pd; yHi = hi + pd; }
+  if (ser.yRange) [yLo, yHi] = ser.yRange;
   const failY = ser.log ? yHi / 1.12 : null;
 
   const stepData = rec.map(e => ({ x: e.x, y: e.y }));
@@ -144,7 +157,7 @@ function drawEvo(ser) {
   const pt = e => ({ x: e.x, y: e.y, _html: e.html, _e: e });
   const recData = rec.map(pt), othData = oth.map(pt);
   const liveData = ser.entries.filter(e => e.live).map(e => ({ x: e.x, y: e.y }));
-  const failData = ser.failures.map(r => ({ x: ms(r.end), y: failY,
+  const failData = ser.failures.map(r => r.html ? { x: ms(r.end), y: r.y, _html: r.html } : ({ x: ms(r.end), y: failY,
     _html: `<div class="t">${esc(r.name)}</div><div class="s">${fmtDate(ms(r.end))} UTC · stopped</div><div class="d">${esc(r.note || "No score.")}</div>` }));
 
   const labels = {
@@ -205,7 +218,7 @@ function drawEvo(ser) {
     `<span><i class="dot rec"></i> record (running best)</span>`,
     `<span><i class="dot oth"></i> other ${S.bench === "lm" ? "checkpoint" : "model"}</span>`,
     liveData.length ? `<span><i class="ring"></i> still training</span>` : "",
-    failData.length ? `<span><i class="cross">×</i> run stopped without a score</span>` : "",
+    failData.length ? `<span><i class="cross">×</i> ${S.speed ? "did not reach the target within the run" : "run stopped without a score"}</span>` : "",
     ser.baselines.length ? `<span><i class="dash"></i> ${S.bench === "lm" ? "baseline reference" : "no-model rule"}</span>` : "",
     `<span class="hint">hover a point for details</span>`,
   ].join("");
@@ -256,6 +269,139 @@ function drawRecords(ser, info) {
   }).join("");
 }
 
+// ── speed view: training time until a model first reaches a fixed target ──
+// Time is wall-clock hours of pretraining on 8 GPUs (GPU-hours / 8). Each model is scored only at some
+// checkpoints, so t* is the first scored checkpoint that reaches the target: an upper bound when it is the
+// first checkpoint scored, bracketed when an earlier scored checkpoint missed.
+const LOBERT = "one token per message", LOBERT_PASS1_H = 7.56; // snapshot "pass1" at train_hours 7.5625 (lobert_r3_10pass metrics.jsonl)
+const pretrainH = name => {
+  const [grp, part] = name.split(" · ");
+  if (grp === LOBERT) { if (/1 pass/.test(part)) return LOBERT_PASS1_H; const m = /(\d+) h/.exec(part || ""); return m ? +m[1] : null; }
+  const r = runs.find(x => x.name === grp); return r && r.points.length ? r.points[r.points.length - 1].hours : (r ? r.budget_h : null);
+};
+// training throughput, messages per second on 8 GPUs, whole 10 h run: tokens / (tokens per message) / seconds (each run's final.json)
+const MSG_PER_S = { "baseline r4": 34054, "no-book ablation": 42462, "field embedding": 35861, "new tokens (a)": 80892,
+  "full book state (Q)": 73179, "level-total book state (A)": 72821, "no book state (N)": 79119,
+  [LOBERT]: 523023 }; // lobert_r3_10pass final.json, 13 h clock on 8 GPUs
+const fmtTput = g => MSG_PER_S[g] ? (MSG_PER_S[g] / 1000).toFixed(1) + "k msg/s" : "—";
+const runDesc = g => (runs.find(r => r.name === g) || {}).desc || (g === LOBERT ? "One token per message (LOBERT); next-message coarse token only." : "");
+
+function speedSource() {
+  Object.assign(S, { lob: D.lob_default, h: 128, ft: "3h", tgt: 1 }); // the single, shared base of the speed view
+  const groups = new Map();
+  const add = (g, h, v, kv, t) => { if (h == null) return; if (!groups.has(g)) groups.set(g, []); groups.get(g).push({ h, v, kv, t }); };
+  let key, src;
+  if (S.bench === "lm") {
+    runs.forEach(r => r.points.forEach(p => add(r.name, p.hours, p.val, null, p.t)));
+    src = { metric: "validation cross-entropy per message", short: "val CE", better: "lower", unit: " nats", ref: refLM, dp: 2,
+      note: "Message-level perplexity = e^CE, so a CE target is a perplexity target. LM evaluations start at 6 h (full 4,096-message context), so any run already under the target at 6 h shows as ≤ 6 h." };
+  } else if (S.bench === "lob") {
+    key = "lob:" + S.lob;
+    D.scores[key].entries.forEach(e => add(e.model, pretrainH(e.model), e.value, e.kv, e.t));
+    src = { metric: `LOB-Bench ${S.lob}`, short: S.lob, better: "lower", unit: "", dp: 3,
+      note: "Only the final checkpoint of each run has been scored on LOB-Bench so far, so every time here is an upper bound (≤ 10 h); scoring earlier checkpoints would tighten it." };
+  } else {
+    key = S.bench === "return" ? `return:${S.h}:pearson` : `pnl:${S.h}:A:x`;
+    const ftOk = kv => S.ft === "3h" ? /fine-tune 3 h/.test(kv[0] || "") : /1,119 steps/.test(kv[0] || "");
+    D.scores[key].entries.filter(e => !/frozen/.test(e.model) && ftOk(e.kv || []))
+      .forEach(e => add(e.model.split(" · ")[0], pretrainH(e.model), e.value, e.kv, e.t));
+    src = S.bench === "return"
+      ? { metric: `return-bench pooled Pearson, ${S.h} messages`, short: "Pearson", better: "higher", unit: "", dp: 3 }
+      : { metric: `PnL A per bet, ${S.h} messages, equal bets`, short: "PnL A", better: "higher", unit: " bps", dp: 3 };
+    src.note = `Time = pretraining of the backbone; every model then gets the same fine-tune (${S.ft === "3h" ? "3 h on 8 GPUs" : "1,119 steps, as r4"}), not counted.`;
+  }
+  if (key) { const r4 = D.scores[key].entries.find(e => /^baseline r4( · end-to-end)?/.test(e.model) && !/frozen/.test(e.model)); src.ref = r4 ? r4.value : null; }
+  return { src, groups };
+}
+
+function speedTargets(src) {
+  if (src.ref == null) return [];
+  const sgn = src.better === "lower" ? -1 : 1;
+  return [[-0.1, "easier"], [0, "= r4"], [0.1, "10% better"], [0.2, "20% better"]]
+    .map(([f, lab]) => ({ v: f === 0 ? src.ref : +(src.ref * (1 + sgn * f)).toFixed(src.dp), lab })); // "= r4" stays exact so r4 reaches its own score
+}
+
+function speedRows(src, groups, T) {
+  const pass = v => src.better === "lower" ? v <= T : v >= T;
+  const rows = [...groups.entries()].map(([g, pts]) => {
+    pts.sort((a, b) => a.h - b.h);
+    const i = pts.findIndex(p => pass(p.v));
+    const maxH = pts[pts.length - 1].h;
+    if (i < 0) return { g, pts, kind: "miss", t: null, maxH };
+    return { g, pts, kind: i > 0 ? "resolved" : "upper", t: pts[i].h, lo: i > 0 ? pts[i - 1].h : null, maxH, v: pts[i].v };
+  });
+  const ref = rows.find(r => r.g === "baseline r4");
+  rows.forEach(r => {
+    r.speedup = "—";
+    if (!ref || r.kind === "miss") return;
+    if (r === ref) { r.speedup = "1.0×"; return; }
+    if (ref.kind === "miss") { r.speedup = `> ${(ref.maxH / r.t).toFixed(1)}×`; return; }
+    const x = (ref.t / r.t).toFixed(1) + "×";
+    r.speedup = r.kind === "upper" && ref.kind === "resolved" ? "≥ " + x : r.kind === "resolved" && ref.kind === "upper" ? "≤ " + x
+      : r.kind === "upper" && ref.kind === "upper" ? "?" : x;
+  });
+  rows.sort((a, b) => (a.t == null) - (b.t == null) || (a.t ?? a.maxH) - (b.t ?? b.maxH) || a.g.localeCompare(b.g));
+  return rows;
+}
+const tTxt = r => r.kind === "miss" ? `not reached by ${r.maxH} h` : r.kind === "upper" ? `≤ ${r.t} h` : `${r.lo}–${r.t} h`;
+
+function renderSpeed() {
+  if (evoChart) { evoChart.destroy(); evoChart = null; }
+  const { src, groups } = speedSource();
+  const targets = speedTargets(src);
+  if (S.tgt >= targets.length) S.tgt = 1;
+  const T = targets.length ? targets[S.tgt].v : null;
+  const fv = v => v.toFixed(src.dp) + src.unit;
+  const cmp = src.better === "lower" ? "≤" : "≥";
+  document.getElementById("scoreTitle").textContent = T == null ? "Speed: no reference score yet"
+    : `Speed: training time until ${src.metric} ${cmp} ${fv(T)}`;
+  document.getElementById("scoreNote").textContent = "Lower time = reaches the same quality with less training; the line is the running best. " + src.note;
+  const rows = T == null ? [] : speedRows(src, groups, T);
+  const empty = document.getElementById("empty");
+  empty.hidden = rows.length > 0;
+  if (!rows.length) empty.innerHTML = `<b>No scores yet</b><p>No model has been scored on this setting.</p>`;
+
+  // same Score Evolution chart as the score view: x = when the model was trained, y = time to reach the target
+  const statusTxt = { miss: "not reached", upper: "upper bound", resolved: "bracketed" };
+  const card = r => `<div class="t">${esc(r.g)}</div><div class="s">${fmtDate(r.x)} UTC · ${statusTxt[r.kind]}</div>
+    <div class="big">${tTxt(r)}</div><div class="kv">${r.t != null ? (r.kind === "upper" ? "≤ " : "") + Math.round(r.t * 8) + " GPU-hours" : "no time to target"}</div>
+    <div class="kv">throughput ${fmtTput(r.g)}</div><div class="kv">scored at ${r.pts.map(p => p.h).join(", ")} h</div>`;
+  rows.forEach(r => { const p = r.t != null ? r.pts.find(q => q.h === r.t) : r.pts[r.pts.length - 1]; r.x = ms(p.t); });
+  const budget = Math.max(10, ...rows.map(r => r.maxH));
+  const ser = {
+    title: "", note: "", axis: "time to reach target, hours on 8 GPUs", better: "lower", unit: "h", log: false,
+    yRange: [0, budget * 1.2],
+    entries: rows.filter(r => r.t != null).map(r => ({ x: r.x, y: r.t, group: r.g, html: card(r), desc: "" })),
+    baselines: [], refName: null, refValue: null,
+    failures: rows.filter(r => r.t == null).map(r => ({ end: r.x, y: budget * 1.1, html: card(r) })),
+  };
+  drawEvo(ser);
+  document.getElementById("boardNote").textContent = "Models ordered by time to reach the target. Throughput = training messages per second on 8 GPUs, averaged over the run.";
+  let html = `<thead><tr><th>#</th><th>Model</th><th>Time to reach target</th><th>GPU-hours</th><th>Throughput</th><th>Scored at (h)</th><th>Status</th></tr></thead><tbody>`;
+  html += rows.map((r, i) => `<tr class="${i === 0 && r.t != null ? "lead" : ""}"><td class="rank">${r.t != null ? i + 1 : "–"}</td>
+    <td><b>${esc(r.g)}</b>${runDesc(r.g) ? `<br><span class="sub">${esc(runDesc(r.g))}</span>` : ""}</td>
+    <td class="num">${tTxt(r)}</td><td class="num">${r.t != null ? (r.kind === "upper" ? "≤ " : "") + Math.round(r.t * 8) : "—"}</td>
+    <td class="num">${fmtTput(r.g)}</td><td class="num">${r.pts.map(p => p.h).join(", ")}</td>
+    <td><span class="chip ${r.kind}">${{ miss: "not reached", upper: "upper bound", resolved: "bracketed" }[r.kind]}</span></td></tr>`).join("");
+  if (!rows.length) html += `<tr><td colspan="7" class="sub">No scores yet.</td></tr>`;
+  document.getElementById("board").innerHTML = html + "</tbody>";
+}
+
+function drawSpeedOpts(o, H) {
+  return; // one gate per bench (r4's score); the threshold / horizon / fine-tune choices stay in code, not shown
+  const { src } = speedSource();
+  const targets = speedTargets(src);
+  if (S.bench === "lob") o.appendChild(seg("method", D.lob_methods.map(m => [m, m + (m === D.lob_default ? " (default)" : "")]), S.lob, v => { S.lob = v; S.tgt = 1; render(); }));
+  if (S.bench === "return" || S.bench === "pnl") {
+    o.appendChild(seg("horizon (messages)", H, S.h, v => { S.h = v; S.tgt = 1; render(); }));
+    o.appendChild(seg("fine-tune", [["3h", "3 h (default)"], ["eq", "1,119 steps"]], S.ft, v => { S.ft = v; render(); }));
+  }
+  if (targets.length) {
+    const cmp = src.better === "lower" ? "≤" : "≥";
+    o.appendChild(seg(`target ${src.short} ${cmp}`, targets.map((t, i) => [i, `${t.v.toFixed(src.dp)} ${t.lab}${i === 1 ? " (default)" : ""}`]), S.tgt, v => { S.tgt = v; render(); }));
+  }
+}
+
 // ── controls ──
 function seg(label, options, cur, onPick) {
   const wrap = document.createElement("span"); wrap.className = "grp";
@@ -270,6 +416,7 @@ function seg(label, options, cur, onPick) {
 function drawOpts() {
   const o = document.getElementById("opts"); o.innerHTML = "";
   const H = HORIZONS.map(h => [h, String(h)]);
+  if (S.speed) { drawSpeedOpts(o, H); return; }
   if (S.bench === "lob") {
     o.appendChild(seg("method", D.lob_methods.map(m => [m, m + (m === D.lob_default ? " (default)" : "")]), S.lob, v => { S.lob = v; render(); }));
   } else if (S.bench === "return") {
@@ -281,12 +428,28 @@ function drawOpts() {
     o.appendChild(seg("sizing", [["x", "equal"], ["y", "vol-scaled"]], S.sizing, v => { S.sizing = v; render(); }));
   }
 }
-document.querySelectorAll("#benchTabs button").forEach(b => b.onclick = () => { S.bench = b.dataset.bench; render(); });
+document.querySelectorAll("#benchTabs button").forEach(b => {
+  b.dataset.score = b.querySelector("span").textContent;
+  b.onclick = () => { if (S.bench !== b.dataset.bench) S.tgt = 1; S.bench = b.dataset.bench; render(); };
+});
+document.getElementById("speedBtn").onclick = () => { S.speed = !S.speed; if (S.speed) S.bench = "lob"; render(); };
 
 function render() {
-  document.querySelectorAll(".bench-fig").forEach(f => { f.hidden = f.dataset.bench !== S.bench; });
-  document.querySelectorAll("#benchTabs button").forEach(b => b.setAttribute("aria-selected", String(b.dataset.bench === S.bench)));
+  document.body.classList.toggle("speed", S.speed);
+  document.getElementById("speedBtn").setAttribute("aria-pressed", String(S.speed));
+  setPalette(S.speed);
+  // intro figures: same content, blue copies (figures/*_blue.png) in the speed view
+  document.querySelectorAll(".intro-body figure a").forEach(a => {
+    const base = a.getAttribute("href").replace(/_blue\.png$/, ".png"), src = S.speed ? base.replace(/\.png$/, "_blue.png") : base;
+    a.setAttribute("href", src); a.querySelector("img").setAttribute("src", src);
+  });
+  document.querySelectorAll(".bench-fig").forEach(f => { f.hidden = f.dataset.bench !== (S.speed ? "speed-" + S.bench : S.bench); });
+  document.querySelectorAll("#benchTabs button").forEach(b => {
+    b.setAttribute("aria-selected", String(b.dataset.bench === S.bench));
+    b.querySelector("span").textContent = S.speed ? b.dataset.speed : b.dataset.score;
+  });
   drawOpts();
+  if (S.speed) { renderSpeed(); writeHash(); return; }
   const ser = currentSeries();
   document.getElementById("scoreTitle").textContent = ser.title;
   document.getElementById("scoreNote").textContent = ser.note;

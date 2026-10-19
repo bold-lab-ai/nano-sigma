@@ -8,14 +8,15 @@
   <meta name="theme-color" content="#ffffff">
   <title>nanoSigma — Score Evolution</title>
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="site.css?v=20261019c">
+  <link rel="stylesheet" href="site.css?v=20261019i">
   <script src="vendor/chart.umd.min.js"></script>
-  <script src="data.js?v=20261019c"></script>
+  <script src="data.js?v=20261019i"></script>
 </head>
 <body>
 <div class="wrap">
   <header>
     <h1>nanoSigma</h1>
+    <button type="button" class="speed-btn" id="speedBtn" aria-pressed="false"><b>Speed</b><span>training time to a target</span></button>
   </header>
   <details class="intro">
     <summary>About nanoSigma — model, data, training and language-model results</summary>
@@ -69,14 +70,18 @@
   </details>
 
   <nav class="scorebar" id="benchTabs" role="tablist" aria-label="Score">
-    <button role="tab" data-bench="lm" class="aux"><b>LM loss</b><span>auxiliary: cross-entropy</span></button>
-    <button role="tab" data-bench="lob"><b>LOB-Bench</b><span>generated order flow vs real</span></button>
-    <button role="tab" data-bench="return"><b>Return bench</b><span>forecast the mid-price return</span></button>
-    <button role="tab" data-bench="pnl"><b>PnL bench</b><span>trade on the forecast</span></button>
+    <button role="tab" data-bench="lm" class="aux" data-speed="time to r4's perplexity"><b>LM loss</b><span>auxiliary: cross-entropy</span></button>
+    <button role="tab" data-bench="lob" data-speed="time to r4's LOB-Bench score"><b>LOB-Bench</b><span>generated order flow vs real</span></button>
+    <button role="tab" data-bench="return" data-speed="time to r4's return Pearson"><b>Return bench</b><span>forecast the mid-price return</span></button>
+    <button role="tab" data-bench="pnl" data-speed="time to r4's PnL per bet"><b>PnL bench</b><span>trade on the forecast</span></button>
   </nav>
   <div class="bench-figs">
-    <figure class="bench-fig" data-bench="lob" hidden><a href="figures/bench_lob.png?v=20261019c"><img src="figures/bench_lob.png" alt="How LOB-Bench is computed: generated vs real continuation, feature_conditional score"></a></figure>
-    <figure class="bench-fig" data-bench="return" hidden><a href="figures/bench_return.png?v=20261019c"><img src="figures/bench_return.png?v=20261019c" alt="How the return bench is computed"></a></figure>
+<figure class="bench-fig" data-bench="speed-lm" hidden><a href="figures/bench_speed_lm.png?v=20261019i"><img src="figures/bench_speed_lm.png?v=20261019i" alt="Speed on LM loss: training time until a model first reaches r4's score"></a></figure>
+    <figure class="bench-fig" data-bench="speed-lob" hidden><a href="figures/bench_speed_lob.png?v=20261019i"><img src="figures/bench_speed_lob.png?v=20261019i" alt="Speed on LOB-Bench: training time until a model first reaches r4's score"></a></figure>
+    <figure class="bench-fig" data-bench="speed-return" hidden><a href="figures/bench_speed_return.png?v=20261019i"><img src="figures/bench_speed_return.png?v=20261019i" alt="Speed on the return bench: training time until a model first reaches r4's score"></a></figure>
+    <figure class="bench-fig" data-bench="speed-pnl" hidden><a href="figures/bench_speed_pnl.png?v=20261019i"><img src="figures/bench_speed_pnl.png?v=20261019i" alt="Speed on the PnL bench: training time until a model first reaches r4's score"></a></figure>
+    <figure class="bench-fig" data-bench="lob" hidden><a href="figures/bench_lob.png?v=20261019i"><img src="figures/bench_lob.png" alt="How LOB-Bench is computed: generated vs real continuation, feature_conditional score"></a></figure>
+    <figure class="bench-fig" data-bench="return" hidden><a href="figures/bench_return.png?v=20261019i"><img src="figures/bench_return.png?v=20261019i" alt="How the return bench is computed"></a></figure>
     <figure class="bench-fig" data-bench="pnl" hidden><a href="figures/bench_pnl.png"><img src="figures/bench_pnl.png" alt="How PnL A and PnL B are computed for one bet"></a></figure>
   </div>
   <div class="opts" id="opts"></div>
@@ -102,6 +107,6 @@
   <footer><span id="foot">—</span> · <a href="https://github.com/bold-lab-ai/nano-sigma">bold-lab-ai/nano-sigma</a></footer>
 </div>
 <div class="card" id="card" aria-hidden="true"></div>
-<script src="app.js?v=20261019c"></script>
+<script src="app.js?v=20261019i"></script>
 </body>
 </html>
