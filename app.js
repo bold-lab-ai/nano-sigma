@@ -229,7 +229,7 @@ function drawBoard(ser) {
     const d = (v / ser.refValue - 1) * 100; return (d > 0 ? "+" : "") + d.toFixed(1) + "%";
   };
   const runOf = name => runs.find(r => r.name === name);
-  let html = `<thead><tr><th>#</th><th>Model</th><th>Score</th>${lm ? "<th>Test</th>" : ""}<th>${esc(refTxt)}</th><th>Scored (UTC)</th>${lm ? "<th>Status</th>" : ""}</tr></thead><tbody>`;
+  let html = `<thead><tr><th>#</th><th>Model</th><th>Score</th>${lm ? "<th>Test</th>" : ""}<th>${esc(refTxt)}</th><th>${S.bench === "lob" ? "Checkpoint (UTC)" : "Scored (UTC)"}</th>${lm ? "<th>Status</th>" : ""}</tr></thead><tbody>`;
   html += rows.map((e, i) => {
     const r = lm ? runOf(e.group) : null;
     const fin = r && r.points.find(p => p.final);
